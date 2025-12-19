@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>North Pole Portal 🎄</title>
+<style>
+body {
+  background: #0b1d33;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 40px;
+}
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+.hidden { display: none; }
+.cat {
+  font-size: 30px;
+  cursor: pointer;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LEVEL 1 -->
+<div id="level1">
+  <h1>🎅 North Pole Portal</h1>
+  <p>Authorized Visitor: <b>HIS NAME</b></p>
+  <p>Santa left something for you…</p>
+
+  <button onclick="goLevel2()">🎁 Enter the North Pole</button>
+
+  <div class="cat" onclick="catNote(1)">🐈</div>
+</div>
+
+<!-- LEVEL 2 -->
+<div id="level2" class="hidden">
+  <h1>⛄ Build the Snowman</h1>
+  <p>Choose the correct order.</p>
+
+  <button onclick="wrong()">🎩 Hat</button>
+  <button onclick="correct()">❄️ Snowball</button>
+  <button onclick="wrong()">🧣 Scarf</button>
+
+  <p id="snowmanMsg"></p>
+
+  <div class="cat" onclick="catNote(2)">🐈</div>
+</div>
+
+<!-- LEVEL 3 -->
+<div id="level3" class="hidden">
+  <h1>🔐 Final Gate</h1>
+  <p>Enter your nickname:</p>
+
+  <input id="password" placeholder="nickname">
+  <button onclick="checkPassword()">Unlock</button>
+
+  <p id="passMsg"></p>
+
+  <div class="cat" onclick="catNote(3)">🐈</div>
+</div>
+
+<!-- FINAL GIFT -->
+<div id="final" class="hidden">
+  <h1>🎄 Merry Christmas</h1>
+  <p>
+    This is your final gift.<br><br>
+    I made all of this just for you.<br>
+    Because you matter to me 🧡
+  </p>
+
+  <div class="cat" onclick="catNote(4)">🐈</div>
+</div>
+
+<script>
+function goLevel2() {
+  document.getElementById("level1").classList.add("hidden");
+  document.getElementById("level2").classList.remove("hidden");
+}
+
+function correct() {
+  document.getElementById("snowmanMsg").innerText =
+    "The snowman smiles and hands you Gift #2 💝";
+  setTimeout(() => {
+    document.getElementById("level2").classList.add("hidden");
+    document.getElementById("level3").classList.remove("hidden");
+  }, 2000);
+}
+
+function wrong() {
+  document.getElementById("snowmanMsg").innerText =
+    "Oops! Try again ❄️";
+}
+
+function checkPassword() {
+  let pass = document.getElementById("password").value.toLowerCase();
+  if (pass === "HISNICKNAME") {
+    document.getElementById("level3").classList.add("hidden");
+    document.getElementById("final").classList.remove("hidden");
+  } else {
+    document.getElementById("passMsg").innerText =
+      "That's close… but not quite 💭";
+  }
+}
+
+function catNote(level) {
+  const notes = {
+    1: "You spotted an orange cat watching you…",
+    2: "The cat drops a tiny folded note.",
+    3: "The cat purrs like it knows the secret.",
+    4: "If you found me… I'm glad it's you 🧡"
+  };
+  alert(notes[level]);
+}
+</script>
+
+</body>
+</html>
