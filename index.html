@@ -2,41 +2,86 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>North Pole Portal 🎄</title>
+<title>Alex’s Christmas Quest 🎄</title>
+
 <style>
 body {
-  background: #0b1d33;
+  margin: 0;
+  font-family: "Comic Sans MS", cursive;
+  background: linear-gradient(#0b1d33, #1e3c72);
   color: white;
-  font-family: Arial, sans-serif;
   text-align: center;
-  padding: 40px;
+  overflow: hidden;
 }
+
+.hidden { display: none; }
+
+.page {
+  padding: 60px 20px;
+  min-height: 100vh;
+}
+
 button {
-  padding: 12px 20px;
+  padding: 14px 22px;
   margin: 10px;
-  border-radius: 10px;
+  font-size: 18px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  background: #ffb703;
 }
-.hidden { display: none; }
+
+button:hover {
+  background: #ffd166;
+}
+
+input {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+}
+
+/* ❄️ Snow animation */
+.snow {
+  position: fixed;
+  top: -10px;
+  color: white;
+  font-size: 16px;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
+  }
+}
+
+/* 🐈 Orange cat */
 .cat {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
   font-size: 30px;
   cursor: pointer;
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- 🎶 Christmas Music -->
+<audio autoplay loop>
+  <source src="christmas.mp3" type="audio/mpeg">
+</audio>
+
 <!-- LEVEL 1 -->
-<div id="level1">
+<div id="level1" class="page">
   <h1>🎅 North Pole Portal</h1>
-  <p>Authorized Visitor: <b>HIS NAME</b></p>
-  <p>Santa left something for you…</p>
+  <p>Authorized Visitor:</p>
+  <h2>Alex 💙</h2>
+
+  <p>Santa left something special just for you.</p>
 
   <button onclick="goLevel2()">🎁 Enter the North Pole</button>
 
@@ -44,13 +89,13 @@ button {
 </div>
 
 <!-- LEVEL 2 -->
-<div id="level2" class="hidden">
+<div id="level2" class="page hidden">
   <h1>⛄ Build the Snowman</h1>
-  <p>Choose the correct order.</p>
+  <p>Build it in the correct order!</p>
 
-  <button onclick="wrong()">🎩 Hat</button>
-  <button onclick="correct()">❄️ Snowball</button>
-  <button onclick="wrong()">🧣 Scarf</button>
+  <button onclick="addStep('hat')">🎩 Hat</button>
+  <button onclick="addStep('snowball')">❄️ Snowball</button>
+  <button onclick="addStep('scarf')">🧣 Scarf</button>
 
   <p id="snowmanMsg"></p>
 
@@ -58,67 +103,91 @@ button {
 </div>
 
 <!-- LEVEL 3 -->
-<div id="level3" class="hidden">
+<div id="level3" class="page hidden">
   <h1>🔐 Final Gate</h1>
   <p>Enter your nickname:</p>
 
   <input id="password" placeholder="nickname">
-  <button onclick="checkPassword()">Unlock</button>
+  <br><br>
+  <button onclick="checkPassword()">Unlock 🎄</button>
 
   <p id="passMsg"></p>
 
   <div class="cat" onclick="catNote(3)">🐈</div>
 </div>
 
-<!-- FINAL GIFT -->
-<div id="final" class="hidden">
-  <h1>🎄 Merry Christmas</h1>
+<!-- FINAL -->
+<div id="final" class="page hidden">
+  <h1>🎄 Merry Christmas, Alex</h1>
   <p>
-    This is your final gift.<br><br>
-    I made all of this just for you.<br>
-    Because you matter to me 🧡
+    I made all of this just for you.<br><br>
+    Even from far away,<br>
+    you matter to me more than you know 🧡
   </p>
 
   <div class="cat" onclick="catNote(4)">🐈</div>
 </div>
 
 <script>
+// ❄️ Falling snow
+for (let i = 0; i < 40; i++) {
+  let snow = document.createElement("div");
+  snow.className = "snow";
+  snow.innerText = "❄";
+  snow.style.left = Math.random() * 100 + "vw";
+  snow.style.animationDuration = 3 + Math.random() * 5 + "s";
+  snow.style.opacity = Math.random();
+  snow.style.fontSize = 12 + Math.random() * 20 + "px";
+  document.body.appendChild(snow);
+}
+
+// Levels
 function goLevel2() {
-  document.getElementById("level1").classList.add("hidden");
-  document.getElementById("level2").classList.remove("hidden");
+  level1.classList.add("hidden");
+  level2.classList.remove("hidden");
 }
 
-function correct() {
-  document.getElementById("snowmanMsg").innerText =
-    "The snowman smiles and hands you Gift #2 💝";
-  setTimeout(() => {
-    document.getElementById("level2").classList.add("hidden");
-    document.getElementById("level3").classList.remove("hidden");
-  }, 2000);
-}
+// ⛄ Snowman logic (FIXED)
+let correctOrder = ["snowball", "scarf", "hat"];
+let playerOrder = [];
 
-function wrong() {
-  document.getElementById("snowmanMsg").innerText =
-    "Oops! Try again ❄️";
-}
+function addStep(step) {
+  playerOrder.push(step);
+  let index = playerOrder.length - 1;
 
-function checkPassword() {
-  let pass = document.getElementById("password").value.toLowerCase();
-  if (pass === "HISNICKNAME") {
-    document.getElementById("level3").classList.add("hidden");
-    document.getElementById("final").classList.remove("hidden");
-  } else {
-    document.getElementById("passMsg").innerText =
-      "That's close… but not quite 💭";
+  if (playerOrder[index] !== correctOrder[index]) {
+    playerOrder = [];
+    snowmanMsg.innerText = "Oops! The snowman fell apart ❄️ Try again!";
+    return;
+  }
+
+  if (playerOrder.length === correctOrder.length) {
+    snowmanMsg.innerText = "Snowman complete! 🎁";
+    setTimeout(() => {
+      level2.classList.add("hidden");
+      level3.classList.remove("hidden");
+    }, 2000);
   }
 }
 
+// 🔐 Password
+function checkPassword() {
+  let pass = password.value.toLowerCase();
+  if (pass === "honey") {
+    level3.classList.add("hidden");
+    final.classList.remove("hidden");
+  } else {
+    passMsg.innerText = "That’s not it… think of what I call you 💭";
+  }
+}
+
+// 🐈 Cat Easter eggs
 function catNote(level) {
   const notes = {
-    1: "You spotted an orange cat watching you…",
+    1: "An orange cat watches you from the snow… 🧡",
     2: "The cat drops a tiny folded note.",
-    3: "The cat purrs like it knows the secret.",
-    4: "If you found me… I'm glad it's you 🧡"
+    3: "The cat purrs like it knows the password.",
+    4: "If you found me… I’m really glad it’s you 🐾🧡"
   };
   alert(notes[level]);
 }
