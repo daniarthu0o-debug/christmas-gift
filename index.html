@@ -126,11 +126,27 @@ input {
   <h1>⛄ Build the Snowman</h1>
   <p>Click the pieces in the correct order!</p>
 
-  <button onclick="addStep('snowball')">❄️ Snowball</button>
-  <button onclick="addStep('scarf')">🧣 Scarf</button>
-  <button onclick="addStep('hat')">🎩 Hat</button>
-  <button onclick="retrySnowman()">🔄 Retry</button>
-  <button onclick="showSolution()">💡 Hint</button>
+  <button onclick="addStep('snowball')">🎩 Snowball</button>
+  <button onclick="addStep('scarf')">❄️ snowball</button>
+  <button onclick="addStep('hat')">🧣 Hat</button>
+  
+  <button class="retry-btn" onclick="retrySnowman()">🔄 Retry</button>
+<style>
+/* ...your existing CSS... */
+
+.retry-btn {
+  display: block;        /* makes it appear on its own line */
+  margin: 10px auto;     /* centers it under the other buttons */
+  padding: 8px 16px;     /* smaller size than the other buttons */
+  font-size: 14px;       /* smaller text */
+  background: #ff6f61;   /* optional: different color */
+}
+
+.retry-btn:hover {
+  background: #ff8a75;   /* optional hover color */
+}
+</style>
+
 
   <p id="snowmanMsg"></p>
   <div id="snowmanVisual"></div>
