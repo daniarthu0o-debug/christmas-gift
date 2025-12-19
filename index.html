@@ -2,24 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Alex’s Christmas Quest 🎄</title>
-
+<title>Alex’s Cozy Christmas Quest 🎄</title>
 <style>
 body {
   margin: 0;
   font-family: "Comic Sans MS", cursive;
-  background: linear-gradient(#0b1d33, #1e3c72);
   color: white;
   text-align: center;
   overflow: hidden;
 }
 
-.hidden { display: none; }
-
+/* Page sections */
 .page {
   padding: 60px 20px;
   min-height: 100vh;
 }
+
+.hidden { display: none; }
 
 button {
   padding: 14px 22px;
@@ -42,7 +41,16 @@ input {
   border: none;
 }
 
-/* ❄️ Snow animation */
+/* Fade-in animation */
+.fade-in {
+  animation: fadeIn 1s forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Snow animation */
 .snow {
   position: fixed;
   top: -10px;
@@ -50,14 +58,11 @@ input {
   font-size: 16px;
   animation: fall linear infinite;
 }
-
 @keyframes fall {
-  to {
-    transform: translateY(110vh);
-  }
+  to { transform: translateY(110vh); }
 }
 
-/* 🐈 Orange cat */
+/* Cat Easter egg */
 .cat {
   position: fixed;
   bottom: 15px;
@@ -65,71 +70,107 @@ input {
   font-size: 30px;
   cursor: pointer;
 }
+
+/* Snowman visual container */
+#snowmanVisual div {
+  font-size: 60px;
+  margin: -20px 0;
+}
+
+/* Cozy house background for Level 1 */
+#level1 {
+  background: url('cozy-house.jpg') no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+/* Twinkling Christmas lights */
+.light {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffd700;
+  animation: blink 1.5s infinite;
+}
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0.3; }
+}
 </style>
 </head>
-
 <body>
 
-<!-- 🎶 Christmas Music -->
+<!-- Background Music -->
 <audio autoplay loop>
   <source src="christmas.mp3" type="audio/mpeg">
 </audio>
 
-<!-- LEVEL 1 -->
+<!-- LEVEL 1: Cozy House -->
 <div id="level1" class="page">
-  <h1>🎅 North Pole Portal</h1>
-  <p>Authorized Visitor:</p>
-  <h2>Alex 💙</h2>
+  <h1>🏠 Welcome to Alex’s Cozy Christmas Home</h1>
+  <p>Snow falls gently outside, and a Christmas tree glows warmly inside 🌟</p>
+  <button onclick="goLevel2()">🎁 Step through the Portal</button>
 
-  <p>Santa left something special just for you.</p>
+  <!-- Level 1 Gift -->
+  <div id="gift1" class="hidden fade-in">
+    🎁 A warm virtual hug for Alex 🧡
+  </div>
 
-  <button onclick="goLevel2()">🎁 Enter the North Pole</button>
-
+  <!-- Cat Easter egg -->
   <div class="cat" onclick="catNote(1)">🐈</div>
 </div>
 
-<!-- LEVEL 2 -->
+<!-- LEVEL 2: Snowman -->
 <div id="level2" class="page hidden">
   <h1>⛄ Build the Snowman</h1>
-  <p>Build it in the correct order!</p>
+  <p>Click the pieces in the correct order!</p>
 
-  <button onclick="addStep('hat')">🎩 Hat</button>
   <button onclick="addStep('snowball')">❄️ Snowball</button>
   <button onclick="addStep('scarf')">🧣 Scarf</button>
+  <button onclick="addStep('hat')">🎩 Hat</button>
+  <button onclick="retrySnowman()">🔄 Retry</button>
+  <button onclick="showSolution()">💡 Hint</button>
 
   <p id="snowmanMsg"></p>
+  <div id="snowmanVisual"></div>
+
+  <!-- Level 2 Gift -->
+  <div id="gift2" class="hidden fade-in">
+    <img src="gift2.png" alt="Gift 2" style="width:200px; margin-top:20px;">
+    <p>Alex, here’s a snowflake just for you! ❄️</p>
+  </div>
 
   <div class="cat" onclick="catNote(2)">🐈</div>
 </div>
 
-<!-- LEVEL 3 -->
+<!-- LEVEL 3: Password -->
 <div id="level3" class="page hidden">
   <h1>🔐 Final Gate</h1>
   <p>Enter your nickname:</p>
-
   <input id="password" placeholder="nickname">
   <br><br>
   <button onclick="checkPassword()">Unlock 🎄</button>
 
   <p id="passMsg"></p>
 
+  <!-- Level 3 Gift -->
+  <div id="gift3" class="hidden fade-in">
+    🎁 Alex, you unlocked the final Christmas surprise! 🧡
+  </div>
+
   <div class="cat" onclick="catNote(3)">🐈</div>
 </div>
 
-<!-- FINAL -->
+<!-- FINAL PAGE -->
 <div id="final" class="page hidden">
   <h1>🎄 Merry Christmas, Alex</h1>
-  <p>
-    I made all of this just for you.<br><br>
-    Even from far away,<br>
-    you matter to me more than you know 🧡
-  </p>
-
+  <p>I made all of this just for you.<br>Even from far away, you matter to me more than you know 🧡</p>
   <div class="cat" onclick="catNote(4)">🐈</div>
 </div>
 
 <script>
-// ❄️ Falling snow
+// Falling snow
 for (let i = 0; i < 40; i++) {
   let snow = document.createElement("div");
   snow.className = "snow";
@@ -141,13 +182,23 @@ for (let i = 0; i < 40; i++) {
   document.body.appendChild(snow);
 }
 
-// Levels
+// Twinkling lights for Level 1
+for (let i = 0; i < 20; i++) {
+  let light = document.createElement("div");
+  light.className = "light";
+  light.style.top = Math.random() * 80 + "vh";
+  light.style.left = Math.random() * 90 + "vw";
+  document.getElementById('level1').appendChild(light);
+}
+
+// Level transitions
 function goLevel2() {
   level1.classList.add("hidden");
   level2.classList.remove("hidden");
+  gift1.classList.remove("hidden");
 }
 
-// ⛄ Snowman logic (FIXED)
+// Snowman logic
 let correctOrder = ["snowball", "scarf", "hat"];
 let playerOrder = [];
 
@@ -157,12 +208,23 @@ function addStep(step) {
 
   if (playerOrder[index] !== correctOrder[index]) {
     playerOrder = [];
-    snowmanMsg.innerText = "Oops! The snowman fell apart ❄️ Try again!";
+    snowmanMsg.innerText = "Oops! Wrong order! ❄️ Try again!";
+    snowmanVisual.innerHTML = "";
     return;
   }
 
+  // Add piece visually with animation
+  let piece = document.createElement("div");
+  piece.innerText = step === "snowball" ? "⚪" : step === "scarf" ? "🧣" : "🎩";
+  piece.style.opacity = 0;
+  piece.style.transition = "opacity 0.5s";
+  snowmanVisual.appendChild(piece);
+  setTimeout(() => { piece.style.opacity = 1; }, 50);
+
   if (playerOrder.length === correctOrder.length) {
     snowmanMsg.innerText = "Snowman complete! 🎁";
+    gift2.classList.remove("hidden");
+    gift2.classList.add("fade-in");
     setTimeout(() => {
       level2.classList.add("hidden");
       level3.classList.remove("hidden");
@@ -170,18 +232,32 @@ function addStep(step) {
   }
 }
 
-// 🔐 Password
+// Retry snowman
+function retrySnowman() {
+  playerOrder = [];
+  snowmanMsg.innerText = "Start building the snowman again! ⛄";
+  snowmanVisual.innerHTML = "";
+}
+
+// Show solution
+function showSolution() {
+  alert("Hint: Build the snowman in this order → Snowball ❄️, Scarf 🧣, Hat 🎩");
+}
+
+// Password check
 function checkPassword() {
   let pass = password.value.toLowerCase();
   if (pass === "honey") {
     level3.classList.add("hidden");
-    final.classList.remove("hidden");
+    gift3.classList.remove("hidden");
+    gift3.classList.add("fade-in");
+    setTimeout(() => { final.classList.remove("hidden"); }, 1500);
   } else {
     passMsg.innerText = "That’s not it… think of what I call you 💭";
   }
 }
 
-// 🐈 Cat Easter eggs
+// Cat Easter eggs
 function catNote(level) {
   const notes = {
     1: "An orange cat watches you from the snow… 🧡",
@@ -192,6 +268,5 @@ function catNote(level) {
   alert(notes[level]);
 }
 </script>
-
 </body>
 </html>
