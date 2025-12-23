@@ -235,7 +235,7 @@ function goLevel2() {
 }
 
 // Snowman logic
-let correctOrder = ["snowball", "scarf", "hat"];
+let correctOrder = ["hat", "scarf", "snowball"];
 let playerOrder = [];
 
 function addStep(step) {
@@ -273,11 +273,6 @@ function retrySnowman() {
   playerOrder = [];
   snowmanMsg.innerText = "Start building the snowman again! ⛄";
   snowmanVisual.innerHTML = "";
-}
-
-// Show solution
-function showSolution() {
-  alert("Hint: Build the snowman in this order → Snowball ⚪, Scarf 🧣, Hat 🎩");
 }
 
 // Password check
