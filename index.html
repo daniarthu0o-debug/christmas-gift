@@ -281,8 +281,6 @@ function addStep(step) {
 
   if (playerOrder.length === correctOrder.length) {
     snowmanMsg.innerText = "Snowman complete! 🎁";
-    gift2.classList.remove("hidden");
-    gift2.classList.add("fade-in");
     setTimeout(() => {
       level2.classList.add("hidden");
       level3.classList.remove("hidden");
